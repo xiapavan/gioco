@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Clash Royale Style Game</title>
+    <title>Clash Royale Style - Ghiaccio</title>
     <style>
         * {
             margin: 0;
@@ -13,17 +13,18 @@
         }
 
         body {
-            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+            background: linear-gradient(135deg, #1a2a6c, #2a3a7c);
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
             color: white;
+            overflow: hidden;
         }
 
         .screen {
             width: 100%;
-            max-width: 800px;
+            max-width: 1000px;
             background: rgba(0, 0, 0, 0.7);
             border-radius: 15px;
             padding: 20px;
@@ -37,7 +38,7 @@
         }
 
         h1 {
-            color: #ffcc00;
+            color: #4fc3f7;
             margin-bottom: 20px;
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
         }
@@ -49,7 +50,7 @@
             border-radius: 10px;
         }
 
-        input, select {
+        input {
             width: 80%;
             padding: 10px;
             margin: 10px 0;
@@ -59,7 +60,7 @@
         }
 
         button {
-            background: #ffcc00;
+            background: #4fc3f7;
             color: #1a2a6c;
             border: none;
             padding: 12px 25px;
@@ -71,53 +72,15 @@
         }
 
         button:hover {
-            background: #ffdd44;
+            background: #81d4fa;
             transform: scale(1.05);
-        }
-
-        .character-selection {
-            display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
-            gap: 15px;
-            margin: 20px 0;
-        }
-
-        .character-card {
-            width: 120px;
-            padding: 10px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .character-card:hover {
-            background: rgba(255, 255, 255, 0.2);
-            transform: translateY(-5px);
-        }
-
-        .character-card.selected {
-            background: rgba(255, 204, 0, 0.3);
-            border: 2px solid #ffcc00;
-        }
-
-        .character-image {
-            width: 80px;
-            height: 80px;
-            background: #555;
-            border-radius: 50%;
-            margin: 0 auto 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 40px;
         }
 
         .game-area {
             display: flex;
             flex-direction: column;
-            height: 600px;
+            height: 80vh;
+            min-height: 600px;
         }
 
         .player-info {
@@ -131,50 +94,120 @@
 
         .battlefield {
             flex-grow: 1;
-            background: linear-gradient(to bottom, #2a553e, #4a755e);
+            background: linear-gradient(to bottom, #bbdefb, #e3f2fd);
             border-radius: 10px;
             position: relative;
             overflow: hidden;
             margin: 10px 0;
+            border: 3px solid #64b5f6;
         }
 
-        .river {
+        .ice-path {
             position: absolute;
-            top: 45%;
-            left: 0;
-            width: 100%;
-            height: 10%;
-            background: linear-gradient(to right, #1a5f7a, #2a8bb8, #1a5f7a);
+            width: 80%;
+            height: 60%;
+            top: 20%;
+            left: 10%;
+            background: linear-gradient(to bottom, #e1f5fe, #b3e5fc);
+            border-radius: 10px;
+            z-index: 1;
+        }
+
+        .king-tower-path {
+            position: absolute;
+            width: 20%;
+            height: 60%;
+            top: 20%;
+            left: 40%;
+            background: linear-gradient(to bottom, #e1f5fe, #b3e5fc);
+            border-radius: 10px;
             z-index: 1;
         }
 
         .tower {
             position: absolute;
-            width: 60px;
-            height: 100px;
-            background: #8B4513;
-            border-radius: 10px;
             z-index: 2;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
-        #player1-tower {
+        .tower-base {
+            width: 60px;
+            height: 60px;
+            background: #5d4037;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 3px solid #3e2723;
+        }
+
+        .tower-top {
+            width: 40px;
+            height: 40px;
+            background: #8d6e63;
+            border-radius: 50%;
+            margin-top: -10px;
+            border: 3px solid #5d4037;
+        }
+
+        .king-tower .tower-base {
+            width: 80px;
+            height: 80px;
+            background: #ff9800;
+        }
+
+        .king-tower .tower-top {
+            width: 60px;
+            height: 60px;
+            background: #ffb74d;
+        }
+
+        .health-bar {
+            width: 100%;
+            height: 5px;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 2px;
+            overflow: hidden;
+            margin-top: 5px;
+        }
+
+        .health-fill {
+            height: 100%;
+            width: 100%;
+            background: #4caf50;
+            transition: width 0.3s;
+        }
+
+        #player1-king-tower {
+            bottom: 10px;
+            left: 45%;
+        }
+
+        #player1-left-tower {
             bottom: 10px;
             left: 20%;
         }
 
-        #player2-tower {
-            top: 10px;
+        #player1-right-tower {
+            bottom: 10px;
             right: 20%;
         }
 
-        .tower-top {
-            position: absolute;
-            width: 80px;
-            height: 40px;
-            background: #A52A2A;
-            border-radius: 10px;
-            top: -20px;
-            left: -10px;
+        #player2-king-tower {
+            top: 10px;
+            left: 45%;
+        }
+
+        #player2-left-tower {
+            top: 10px;
+            left: 20%;
+        }
+
+        #player2-right-tower {
+            top: 10px;
+            right: 20%;
         }
 
         .elixir-bar {
@@ -188,7 +221,7 @@
         .elixir-fill {
             height: 100%;
             width: 0%;
-            background: linear-gradient(to right, #8A2BE2, #4B0082);
+            background: linear-gradient(to right, #7b1fa2, #9c27b0);
             border-radius: 10px;
             transition: width 0.5s;
         }
@@ -213,22 +246,30 @@
             transition: all 0.3s;
             position: relative;
             overflow: hidden;
+            user-select: none;
+            touch-action: none;
+        }
+
+        .game-card.draggable {
+            cursor: grab;
+        }
+
+        .game-card.dragging {
+            opacity: 0.8;
+            transform: scale(1.1);
+            z-index: 10;
         }
 
         .game-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 5px 15px rgba(255, 204, 0, 0.5);
-        }
-
-        .game-card:active {
-            transform: translateY(0);
+            box-shadow: 0 5px 15px rgba(79, 195, 247, 0.5);
         }
 
         .card-cost {
             position: absolute;
             top: 5px;
             left: 5px;
-            background: #8A2BE2;
+            background: #7b1fa2;
             width: 25px;
             height: 25px;
             border-radius: 50%;
@@ -261,6 +302,8 @@
             justify-content: center;
             font-size: 20px;
             transition: all 0.5s;
+            user-select: none;
+            pointer-events: none;
         }
 
         .player1-unit {
@@ -273,7 +316,7 @@
             top: 10px;
         }
 
-        .health-bar {
+        .unit-health-bar {
             position: absolute;
             bottom: -5px;
             left: 0;
@@ -284,7 +327,7 @@
             overflow: hidden;
         }
 
-        .health-fill {
+        .unit-health-fill {
             height: 100%;
             width: 100%;
             background: #2ecc71;
@@ -306,61 +349,36 @@
         .hidden {
             display: none;
         }
+
+        .drop-zone {
+            position: absolute;
+            width: 100%;
+            height: 45%;
+            z-index: 2;
+        }
+
+        #player1-drop-zone {
+            bottom: 0;
+        }
+
+        #player2-drop-zone {
+            top: 0;
+        }
     </style>
 </head>
 <body>
     <!-- Schermata iniziale -->
     <div id="start-screen" class="screen">
-        <h1>Clash Royale Style Game</h1>
+        <h1>Clash Royale Style - Regno di Ghiaccio</h1>
         
         <div class="player-input">
             <h2>Giocatore 1</h2>
             <input type="text" id="player1-name" placeholder="Nome Giocatore 1">
-            
-            <h3>Seleziona Personaggio</h3>
-            <div class="character-selection">
-                <div class="character-card" data-character="archer">
-                    <div class="character-image">🏹</div>
-                    <p>Arciere</p>
-                </div>
-                <div class="character-card" data-character="knight">
-                    <div class="character-image">⚔️</div>
-                    <p>Cavaliere</p>
-                </div>
-                <div class="character-card" data-character="wizard">
-                    <div class="character-image">🔮</div>
-                    <p>Mago</p>
-                </div>
-                <div class="character-card" data-character="giant">
-                    <div class="character-image">🛡️</div>
-                    <p>Gigante</p>
-                </div>
-            </div>
         </div>
         
         <div class="player-input">
             <h2>Giocatore 2</h2>
             <input type="text" id="player2-name" placeholder="Nome Giocatore 2">
-            
-            <h3>Seleziona Personaggio</h3>
-            <div class="character-selection">
-                <div class="character-card" data-character="archer">
-                    <div class="character-image">🏹</div>
-                    <p>Arciere</p>
-                </div>
-                <div class="character-card" data-character="knight">
-                    <div class="character-image">⚔️</div>
-                    <p>Cavaliere</p>
-                </div>
-                <div class="character-card" data-character="wizard">
-                    <div class="character-image">🔮</div>
-                    <p>Mago</p>
-                </div>
-                <div class="character-card" data-character="giant">
-                    <div class="character-image">🛡️</div>
-                    <p>Gigante</p>
-                </div>
-            </div>
         </div>
         
         <button id="start-button">Inizia Partita</button>
@@ -376,7 +394,7 @@
                         <div id="player1-elixir" class="elixir-fill"></div>
                     </div>
                 </div>
-                <div id="timer">90</div>
+                <div id="timer">180</div>
                 <div id="player2-info">
                     <h2 id="player2-display-name">Giocatore 2</h2>
                     <div class="elixir-bar">
@@ -386,21 +404,68 @@
             </div>
             
             <div class="battlefield">
-                <div class="river"></div>
+                <div class="ice-path"></div>
+                <div class="king-tower-path"></div>
                 
-                <div id="player1-tower" class="tower">
-                    <div class="tower-top"></div>
+                <!-- Torri Giocatore 1 -->
+                <div id="player1-king-tower" class="tower king-tower">
+                    <div class="tower-base">
+                        <div class="tower-top"></div>
+                    </div>
                     <div class="health-bar">
-                        <div id="player1-tower-health" class="health-fill"></div>
+                        <div id="player1-king-tower-health" class="health-fill"></div>
                     </div>
                 </div>
                 
-                <div id="player2-tower" class="tower">
-                    <div class="tower-top"></div>
+                <div id="player1-left-tower" class="tower">
+                    <div class="tower-base">
+                        <div class="tower-top"></div>
+                    </div>
                     <div class="health-bar">
-                        <div id="player2-tower-health" class="health-fill"></div>
+                        <div id="player1-left-tower-health" class="health-fill"></div>
                     </div>
                 </div>
+                
+                <div id="player1-right-tower" class="tower">
+                    <div class="tower-base">
+                        <div class="tower-top"></div>
+                    </div>
+                    <div class="health-bar">
+                        <div id="player1-right-tower-health" class="health-fill"></div>
+                    </div>
+                </div>
+                
+                <!-- Torri Giocatore 2 -->
+                <div id="player2-king-tower" class="tower king-tower">
+                    <div class="tower-base">
+                        <div class="tower-top"></div>
+                    </div>
+                    <div class="health-bar">
+                        <div id="player2-king-tower-health" class="health-fill"></div>
+                    </div>
+                </div>
+                
+                <div id="player2-left-tower" class="tower">
+                    <div class="tower-base">
+                        <div class="tower-top"></div>
+                    </div>
+                    <div class="health-bar">
+                        <div id="player2-left-tower-health" class="health-fill"></div>
+                    </div>
+                </div>
+                
+                <div id="player2-right-tower" class="tower">
+                    <div class="tower-base">
+                        <div class="tower-top"></div>
+                    </div>
+                    <div class="health-bar">
+                        <div id="player2-right-tower-health" class="health-fill"></div>
+                    </div>
+                </div>
+                
+                <!-- Zone di rilascio -->
+                <div id="player1-drop-zone" class="drop-zone"></div>
+                <div id="player2-drop-zone" class="drop-zone"></div>
                 
                 <!-- Le unità verranno aggiunte qui dinamicamente -->
             </div>
@@ -426,17 +491,37 @@
         // Dati del gioco
         const gameData = {
             players: [
-                { name: "", character: "", elixir: 0, towerHealth: 100 },
-                { name: "", character: "", elixir: 0, towerHealth: 100 }
+                { 
+                    name: "", 
+                    elixir: 5, 
+                    towers: {
+                        king: { health: 100, maxHealth: 100 },
+                        left: { health: 50, maxHealth: 50 },
+                        right: { health: 50, maxHealth: 50 }
+                    }
+                },
+                { 
+                    name: "", 
+                    elixir: 5, 
+                    towers: {
+                        king: { health: 100, maxHealth: 100 },
+                        left: { health: 50, maxHealth: 50 },
+                        right: { health: 50, maxHealth: 50 }
+                    }
+                }
             ],
             characters: {
                 archer: { name: "Arciere", cost: 3, damage: 15, health: 50, speed: 2, emoji: "🏹" },
-                knight: { name: "Cavaliere", cost: 4, damage: 25, health: 100, speed: 1, emoji: "⚔️" },
+                knight: { name: "Cavaliere", cost: 4, damage: 25, health: 100, speed: 1.5, emoji: "⚔️" },
                 wizard: { name: "Mago", cost: 5, damage: 35, health: 60, speed: 1, emoji: "🔮" },
-                giant: { name: "Gigante", cost: 6, damage: 20, health: 200, speed: 0.5, emoji: "🛡️" }
+                giant: { name: "Gigante", cost: 6, damage: 20, health: 200, speed: 0.8, emoji: "🛡️" },
+                goblin: { name: "Goblin", cost: 2, damage: 10, health: 30, speed: 3, emoji: "👺" },
+                icewizard: { name: "Mago di Ghiaccio", cost: 4, damage: 20, health: 70, speed: 1, emoji: "❄️" },
+                valkyrie: { name: "Valkiria", cost: 5, damage: 30, health: 120, speed: 1.2, emoji: "⚔️" },
+                dragon: { name: "Drago", cost: 7, damage: 40, health: 150, speed: 1.5, emoji: "🐲" }
             },
             gameState: "start", // start, playing, ended
-            timer: 90,
+            timer: 180,
             units: [],
             currentPlayer: 0,
             elixirGenerationRate: 0.2, // elisir per secondo
@@ -451,22 +536,37 @@
         const playAgainButton = document.getElementById('play-again-button');
         const player1NameInput = document.getElementById('player1-name');
         const player2NameInput = document.getElementById('player2-name');
-        const characterCards = document.querySelectorAll('.character-card');
         const player1DisplayName = document.getElementById('player1-display-name');
         const player2DisplayName = document.getElementById('player2-display-name');
         const player1Elixir = document.getElementById('player1-elixir');
         const player2Elixir = document.getElementById('player2-elixir');
-        const player1TowerHealth = document.getElementById('player1-tower-health');
-        const player2TowerHealth = document.getElementById('player2-tower-health');
         const timerElement = document.getElementById('timer');
         const winnerMessage = document.getElementById('winner-message');
         const battlefield = document.querySelector('.battlefield');
         const player1CardsContainer = document.getElementById('player1-cards');
         const player2CardsContainer = document.getElementById('player2-cards');
+        const player1DropZone = document.getElementById('player1-drop-zone');
+        const player2DropZone = document.getElementById('player2-drop-zone');
+
+        // Riferimenti alle torri
+        const towerHealthElements = {
+            player1: {
+                king: document.getElementById('player1-king-tower-health'),
+                left: document.getElementById('player1-left-tower-health'),
+                right: document.getElementById('player1-right-tower-health')
+            },
+            player2: {
+                king: document.getElementById('player2-king-tower-health'),
+                left: document.getElementById('player2-left-tower-health'),
+                right: document.getElementById('player2-right-tower-health')
+            }
+        };
 
         // Variabili di gioco
         let gameInterval;
-        let selectedCharacters = [null, null];
+        let draggedCard = null;
+        let dragOffsetX = 0;
+        let dragOffsetY = 0;
 
         // Inizializzazione
         document.addEventListener('DOMContentLoaded', init);
@@ -476,46 +576,31 @@
             startButton.addEventListener('click', startGame);
             playAgainButton.addEventListener('click', resetGame);
             
-            // Aggiungi event listeners per selezione personaggi
-            characterCards.forEach(card => {
-                card.addEventListener('click', function() {
-                    const character = this.getAttribute('data-character');
-                    const playerIndex = this.closest('.player-input') ? 
-                        (this.closest('.player-input').querySelector('h2').textContent === 'Giocatore 1' ? 0 : 1) : 0;
-                    
-                    // Deseleziona altre carte dello stesso giocatore
-                    const playerCards = this.closest('.player-input').querySelectorAll('.character-card');
-                    playerCards.forEach(c => c.classList.remove('selected'));
-                    
-                    // Seleziona questa carta
-                    this.classList.add('selected');
-                    selectedCharacters[playerIndex] = character;
-                });
-            });
+            // Aggiungi event listeners per il drag and drop
+            document.addEventListener('touchstart', handleTouchStart, { passive: false });
+            document.addEventListener('touchmove', handleTouchMove, { passive: false });
+            document.addEventListener('touchend', handleTouchEnd);
+            
+            document.addEventListener('mousedown', handleMouseDown);
+            document.addEventListener('mousemove', handleMouseMove);
+            document.addEventListener('mouseup', handleMouseUp);
         }
 
         function startGame() {
-            // Verifica che i nomi e i personaggi siano stati selezionati
+            // Verifica che i nomi siano stati inseriti
             if (!player1NameInput.value || !player2NameInput.value) {
                 alert("Inserisci i nomi di entrambi i giocatori!");
                 return;
             }
             
-            if (!selectedCharacters[0] || !selectedCharacters[1]) {
-                alert("Seleziona un personaggio per entrambi i giocatori!");
-                return;
-            }
-            
             // Imposta i dati dei giocatori
             gameData.players[0].name = player1NameInput.value;
-            gameData.players[0].character = selectedCharacters[0];
             gameData.players[0].elixir = 5;
-            gameData.players[0].towerHealth = 100;
+            resetTowers(0);
             
             gameData.players[1].name = player2NameInput.value;
-            gameData.players[1].character = selectedCharacters[1];
             gameData.players[1].elixir = 5;
-            gameData.players[1].towerHealth = 100;
+            resetTowers(1);
             
             // Aggiorna la UI
             player1DisplayName.textContent = gameData.players[0].name;
@@ -532,13 +617,20 @@
             
             // Avvia il gioco
             gameData.gameState = "playing";
-            gameData.timer = 90;
+            gameData.timer = 180;
             gameData.units = [];
             gameData.currentPlayer = 0;
             gameData.lastElixirUpdate = Date.now();
             
             // Avvia il loop di gioco
             gameInterval = setInterval(gameLoop, 100);
+        }
+
+        function resetTowers(playerIndex) {
+            const player = gameData.players[playerIndex];
+            player.towers.king.health = player.towers.king.maxHealth;
+            player.towers.left.health = player.towers.left.maxHealth;
+            player.towers.right.health = player.towers.right.maxHealth;
         }
 
         function gameLoop() {
@@ -573,8 +665,21 @@
         }
 
         function updateTowerHealth() {
-            player1TowerHealth.style.width = gameData.players[0].towerHealth + '%';
-            player2TowerHealth.style.width = gameData.players[1].towerHealth + '%';
+            // Giocatore 1
+            towerHealthElements.player1.king.style.width = 
+                (gameData.players[0].towers.king.health / gameData.players[0].towers.king.maxHealth * 100) + '%';
+            towerHealthElements.player1.left.style.width = 
+                (gameData.players[0].towers.left.health / gameData.players[0].towers.left.maxHealth * 100) + '%';
+            towerHealthElements.player1.right.style.width = 
+                (gameData.players[0].towers.right.health / gameData.players[0].towers.right.maxHealth * 100) + '%';
+            
+            // Giocatore 2
+            towerHealthElements.player2.king.style.width = 
+                (gameData.players[1].towers.king.health / gameData.players[1].towers.king.maxHealth * 100) + '%';
+            towerHealthElements.player2.left.style.width = 
+                (gameData.players[1].towers.left.health / gameData.players[1].towers.left.maxHealth * 100) + '%';
+            towerHealthElements.player2.right.style.width = 
+                (gameData.players[1].towers.right.health / gameData.players[1].towers.right.maxHealth * 100) + '%';
         }
 
         function updateTimer() {
@@ -609,9 +714,10 @@
 
         function createCardElement(character, characterKey, playerIndex) {
             const card = document.createElement('div');
-            card.className = 'game-card';
+            card.className = 'game-card draggable';
             card.setAttribute('data-character', characterKey);
             card.setAttribute('data-player', playerIndex);
+            card.setAttribute('data-cost', character.cost);
             
             const cost = document.createElement('div');
             cost.className = 'card-cost';
@@ -630,29 +736,137 @@
             card.appendChild(image);
             card.appendChild(name);
             
-            // Aggiungi event listener per il click sulla carta
-            card.addEventListener('click', function() {
-                playCard(this, playerIndex);
-            });
-            
             return card;
         }
 
-        function playCard(cardElement, playerIndex) {
-            const characterKey = cardElement.getAttribute('data-character');
-            const character = gameData.characters[characterKey];
+        // Gestione del drag and drop per touch
+        function handleTouchStart(e) {
+            if (gameData.gameState !== "playing") return;
+            
+            const touch = e.touches[0];
+            const card = touch.target.closest('.draggable');
+            
+            if (card) {
+                e.preventDefault();
+                startDrag(card, touch.clientX, touch.clientY);
+            }
+        }
+
+        function handleTouchMove(e) {
+            if (!draggedCard) return;
+            
+            const touch = e.touches[0];
+            e.preventDefault();
+            updateDrag(touch.clientX, touch.clientY);
+        }
+
+        function handleTouchEnd(e) {
+            if (!draggedCard) return;
+            
+            endDrag();
+        }
+
+        // Gestione del drag and drop per mouse
+        function handleMouseDown(e) {
+            if (gameData.gameState !== "playing") return;
+            
+            const card = e.target.closest('.draggable');
+            
+            if (card) {
+                startDrag(card, e.clientX, e.clientY);
+            }
+        }
+
+        function handleMouseMove(e) {
+            if (!draggedCard) return;
+            
+            updateDrag(e.clientX, e.clientY);
+        }
+
+        function handleMouseUp(e) {
+            if (!draggedCard) return;
+            
+            endDrag();
+        }
+
+        function startDrag(card, clientX, clientY) {
+            const playerIndex = parseInt(card.getAttribute('data-player'));
+            const characterKey = card.getAttribute('data-character');
+            const cost = parseInt(card.getAttribute('data-cost'));
             
             // Verifica se il giocatore ha abbastanza elisir
-            if (gameData.players[playerIndex].elixir < character.cost) {
+            if (gameData.players[playerIndex].elixir < cost) {
                 alert("Elisir insufficiente!");
                 return;
             }
             
-            // Sottrai l'elisir
-            gameData.players[playerIndex].elixir -= character.cost;
-            updateElixirBars();
+            draggedCard = card;
+            draggedCard.classList.add('dragging');
             
-            // Crea l'unità
+            // Calcola l'offset per mantenere la posizione del mouse relativa alla carta
+            const rect = card.getBoundingClientRect();
+            dragOffsetX = clientX - rect.left;
+            dragOffsetY = clientY - rect.top;
+            
+            // Posiziona la carta sotto il cursore
+            updateDrag(clientX, clientY);
+        }
+
+        function updateDrag(clientX, clientY) {
+            if (!draggedCard) return;
+            
+            draggedCard.style.position = 'fixed';
+            draggedCard.style.left = (clientX - dragOffsetX) + 'px';
+            draggedCard.style.top = (clientY - dragOffsetY) + 'px';
+        }
+
+        function endDrag() {
+            if (!draggedCard) return;
+            
+            const playerIndex = parseInt(draggedCard.getAttribute('data-player'));
+            const characterKey = draggedCard.getAttribute('data-character');
+            const cost = parseInt(draggedCard.getAttribute('data-cost'));
+            
+            // Ottieni la posizione della carta
+            const rect = draggedCard.getBoundingClientRect();
+            const battlefieldRect = battlefield.getBoundingClientRect();
+            
+            // Verifica se la carta è stata rilasciata nella zona di gioco corretta
+            const dropZone = playerIndex === 0 ? player1DropZone : player2DropZone;
+            const dropZoneRect = dropZone.getBoundingClientRect();
+            
+            if (rect.top < dropZoneRect.bottom && rect.bottom > dropZoneRect.top &&
+                rect.left < dropZoneRect.right && rect.right > dropZoneRect.left) {
+                
+                // Calcola la posizione relativa al campo di battaglia
+                const x = rect.left - battlefieldRect.left + rect.width / 2;
+                const y = rect.top - battlefieldRect.top + rect.height / 2;
+                
+                // Verifica se il giocatore ha abbastanza elisir
+                if (gameData.players[playerIndex].elixir >= cost) {
+                    // Sottrai l'elisir
+                    gameData.players[playerIndex].elixir -= cost;
+                    updateElixirBars();
+                    
+                    // Crea l'unità
+                    createUnit(characterKey, playerIndex, x, y);
+                    
+                    // Sostituisci la carta con una nuova
+                    replaceCard(draggedCard, playerIndex);
+                }
+            }
+            
+            // Ripristina la carta
+            draggedCard.classList.remove('dragging');
+            draggedCard.style.position = '';
+            draggedCard.style.left = '';
+            draggedCard.style.top = '';
+            draggedCard = null;
+        }
+
+        function createUnit(characterKey, playerIndex, x, y) {
+            const character = gameData.characters[characterKey];
+            
             const unit = {
                 player: playerIndex,
                 type: characterKey,
@@ -660,8 +874,9 @@
                 maxHealth: character.health,
                 damage: character.damage,
                 speed: character.speed,
-                x: playerIndex === 0 ? 50 : 750, // Posizione iniziale
-                y: 100 + Math.random() * 200, // Posizione Y casuale
+                x: x,
+                y: y,
+                target: null,
                 element: null
             };
             
@@ -669,14 +884,6 @@
             
             // Aggiungi l'unità al campo di battaglia
             addUnitToBattlefield(unit);
-            
-            // Rimuovi la carta e sostituiscila con una nuova
-            const newCharacterKeys = Object.keys(gameData.characters);
-            const newRandomCharacterKey = newCharacterKeys[Math.floor(Math.random() * newCharacterKeys.length)];
-            const newCharacter = gameData.characters[newRandomCharacterKey];
-            
-            const newCard = createCardElement(newCharacter, newRandomCharacterKey, playerIndex);
-            cardElement.parentNode.replaceChild(newCard, cardElement);
         }
 
         function addUnitToBattlefield(unit) {
@@ -686,8 +893,8 @@
             unitElement.style.top = unit.y + 'px';
             unitElement.innerHTML = `
                 ${gameData.characters[unit.type].emoji}
-                <div class="health-bar">
-                    <div class="health-fill" style="width: 100%"></div>
+                <div class="unit-health-bar">
+                    <div class="unit-health-fill" style="width: 100%"></div>
                 </div>
             `;
             
@@ -695,26 +902,34 @@
             unit.element = unitElement;
         }
 
+        function replaceCard(cardElement, playerIndex) {
+            const characterKeys = Object.keys(gameData.characters);
+            const newRandomCharacterKey = characterKeys[Math.floor(Math.random() * characterKeys.length)];
+            const newCharacter = gameData.characters[newRandomCharacterKey];
+            
+            const newCard = createCardElement(newCharacter, newRandomCharacterKey, playerIndex);
+            cardElement.parentNode.replaceChild(newCard, cardElement);
+        }
+
         function updateUnits() {
             gameData.units.forEach(unit => {
-                // Muovi l'unità
-                if (unit.player === 0) {
-                    unit.x += unit.speed; // Si muove verso destra
-                } else {
-                    unit.x -= unit.speed; // Si muove verso sinistra
+                // Trova un bersaglio se non ne ha uno
+                if (!unit.target) {
+                    unit.target = findTarget(unit);
                 }
                 
-                // Aggiorna la posizione
-                unit.element.style.left = unit.x + 'px';
-                
-                // Controlla collisioni con le torri
-                checkTowerCollision(unit);
-                
-                // Controlla collisioni con altre unità
-                checkUnitCollisions(unit);
+                // Muovi l'unità verso il bersaglio
+                if (unit.target) {
+                    moveUnitTowardsTarget(unit);
+                    
+                    // Controlla se è abbastanza vicino per attaccare
+                    if (isUnitInRange(unit, unit.target)) {
+                        attackTarget(unit, unit.target);
+                    }
+                }
                 
                 // Aggiorna la barra della salute
-                const healthFill = unit.element.querySelector('.health-fill');
+                const healthFill = unit.element.querySelector('.unit-health-fill');
                 healthFill.style.width = (unit.health / unit.maxHealth) * 100 + '%';
                 
                 // Rimuovi le unità morte
@@ -725,43 +940,154 @@
             });
         }
 
-        function checkTowerCollision(unit) {
-            const tower = unit.player === 0 ? gameData.players[1] : gameData.players[0];
-            const towerX = unit.player === 0 ? 750 : 50;
+        function findTarget(unit) {
+            // Cerca prima le unità nemiche
+            for (const otherUnit of gameData.units) {
+                if (otherUnit.player !== unit.player) {
+                    return { type: 'unit', object: otherUnit };
+                }
+            }
             
-            // Se l'unità è vicina alla torre avversaria
-            if (Math.abs(unit.x - towerX) < 50) {
-                // Infliggi danni alla torre
-                tower.towerHealth -= unit.damage / 10;
-                updateTowerHealth();
+            // Se non ci sono unità nemiche, cerca le torri
+            const enemyPlayerIndex = unit.player === 0 ? 1 : 0;
+            const enemyTowers = gameData.players[enemyPlayerIndex].towers;
+            
+            // Priorità: torri normali prima della torre del re
+            if (enemyTowers.left.health > 0) {
+                return { type: 'tower', object: enemyTowers.left, id: 'left' };
+            } else if (enemyTowers.right.health > 0) {
+                return { type: 'tower', object: enemyTowers.right, id: 'right' };
+            } else if (enemyTowers.king.health > 0) {
+                return { type: 'tower', object: enemyTowers.king, id: 'king' };
+            }
+            
+            return null;
+        }
+
+        function moveUnitTowardsTarget(unit) {
+            if (!unit.target) return;
+            
+            let targetX, targetY;
+            
+            if (unit.target.type === 'unit') {
+                targetX = unit.target.object.x;
+                targetY = unit.target.object.y;
+            } else { // tower
+                // Posiziona l'unità verso la torre appropriata
+                const enemyPlayerIndex = unit.player === 0 ? 1 : 0;
+                const towerId = unit.target.id;
                 
-                // L'unità muore dopo l'attacco (per semplicità)
-                unit.health = 0;
+                // Calcola la posizione approssimativa della torre
+                if (enemyPlayerIndex === 0) { // Giocatore 1 (in basso)
+                    if (towerId === 'king') {
+                        targetX = battlefield.offsetWidth * 0.45;
+                        targetY = battlefield.offsetHeight * 0.8;
+                    } else if (towerId === 'left') {
+                        targetX = battlefield.offsetWidth * 0.2;
+                        targetY = battlefield.offsetHeight * 0.8;
+                    } else { // right
+                        targetX = battlefield.offsetWidth * 0.7;
+                        targetY = battlefield.offsetHeight * 0.8;
+                    }
+                } else { // Giocatore 2 (in alto)
+                    if (towerId === 'king') {
+                        targetX = battlefield.offsetWidth * 0.45;
+                        targetY = battlefield.offsetHeight * 0.2;
+                    } else if (towerId === 'left') {
+                        targetX = battlefield.offsetWidth * 0.2;
+                        targetY = battlefield.offsetHeight * 0.2;
+                    } else { // right
+                        targetX = battlefield.offsetWidth * 0.7;
+                        targetY = battlefield.offsetHeight * 0.2;
+                    }
+                }
+            }
+            
+            // Calcola la direzione
+            const dx = targetX - unit.x;
+            const dy = targetY - unit.y;
+            const distance = Math.sqrt(dx * dx + dy * dy);
+            
+            // Normalizza e applica la velocità
+            if (distance > 0) {
+                unit.x += (dx / distance) * unit.speed;
+                unit.y += (dy / distance) * unit.speed;
+            }
+            
+            // Aggiorna la posizione dell'elemento
+            unit.element.style.left = unit.x + 'px';
+            unit.element.style.top = unit.y + 'px';
+        }
+
+        function isUnitInRange(unit, target) {
+            if (!target) return false;
+            
+            let targetX, targetY;
+            
+            if (target.type === 'unit') {
+                targetX = target.object.x;
+                targetY = target.object.y;
+            } else {
+                // Per le torri, usa una distanza fissa
+                return Math.abs(unit.x - getTowerX(target.id, unit.player === 0 ? 1 : 0)) < 80 &&
+                       Math.abs(unit.y - getTowerY(target.id, unit.player === 0 ? 1 : 0)) < 80;
+            }
+            
+            const dx = unit.x - targetX;
+            const dy = unit.y - targetY;
+            const distance = Math.sqrt(dx * dx + dy * dy);
+            
+            return distance < 50; // Raggio di attacco
+        }
+
+        function getTowerX(towerId, playerIndex) {
+            if (playerIndex === 0) { // Giocatore 1 (in basso)
+                if (towerId === 'king') return battlefield.offsetWidth * 0.45;
+                if (towerId === 'left') return battlefield.offsetWidth * 0.2;
+                return battlefield.offsetWidth * 0.7; // right
+            } else { // Giocatore 2 (in alto)
+                if (towerId === 'king') return battlefield.offsetWidth * 0.45;
+                if (towerId === 'left') return battlefield.offsetWidth * 0.2;
+                return battlefield.offsetWidth * 0.7; // right
             }
         }
 
-        function checkUnitCollisions(unit) {
-            gameData.units.forEach(otherUnit => {
-                // Se l'unità è avversaria e vicina
-                if (otherUnit.player !== unit.player && 
-                    Math.abs(unit.x - otherUnit.x) < 50 && 
-                    Math.abs(unit.y - otherUnit.y) < 50) {
-                    
-                    // Le unità si attaccano a vicenda
-                    unit.health -= otherUnit.damage;
-                    otherUnit.health -= unit.damage;
-                }
-            });
+        function getTowerY(towerId, playerIndex) {
+            if (playerIndex === 0) { // Giocatore 1 (in basso)
+                return battlefield.offsetHeight * 0.8;
+            } else { // Giocatore 2 (in alto)
+                return battlefield.offsetHeight * 0.2;
+            }
+        }
+
+        function attackTarget(unit, target) {
+            if (target.type === 'unit') {
+                target.object.health -= unit.damage;
+            } else { // tower
+                target.object.health -= unit.damage / 10;
+                updateTowerHealth();
+            }
         }
 
         function checkWinConditions() {
-            // Controlla se una torre è stata distrutta
-            if (gameData.players[0].towerHealth <= 0) {
+            // Controlla se tutte le torri di un giocatore sono state distrutte
+            const player1Towers = gameData.players[0].towers;
+            const player2Towers = gameData.players[1].towers;
+            
+            const player1Alive = player1Towers.king.health > 0 || 
+                                player1Towers.left.health > 0 || 
+                                player1Towers.right.health > 0;
+            
+            const player2Alive = player2Towers.king.health > 0 || 
+                                player2Towers.left.health > 0 || 
+                                player2Towers.right.health > 0;
+            
+            if (!player1Alive) {
                 endGame("player2");
                 return;
             }
             
-            if (gameData.players[1].towerHealth <= 0) {
+            if (!player2Alive) {
                 endGame("player1");
                 return;
             }
@@ -778,9 +1104,22 @@
             } else if (reason === "player2") {
                 winner = gameData.players[1].name;
             } else {
-                // In caso di timeout, vince chi ha più salute della torre
-                winner = gameData.players[0].towerHealth > gameData.players[1].towerHealth ? 
-                    gameData.players[0].name : gameData.players[1].name;
+                // In caso di timeout, vince chi ha più torri in vita
+                const player1TowerCount = countAliveTowers(0);
+                const player2TowerCount = countAliveTowers(1);
+                
+                if (player1TowerCount > player2TowerCount) {
+                    winner = gameData.players[0].name;
+                } else if (player2TowerCount > player1TowerCount) {
+                    winner = gameData.players[1].name;
+                } else {
+                    // Se hanno lo stesso numero di torri, vince chi ha più salute totale
+                    const player1TotalHealth = calculateTotalTowerHealth(0);
+                    const player2TotalHealth = calculateTotalTowerHealth(1);
+                    
+                    winner = player1TotalHealth > player2TotalHealth ? 
+                        gameData.players[0].name : gameData.players[1].name;
+                }
             }
             
             // Mostra il messaggio del vincitore
@@ -791,23 +1130,30 @@
             endScreen.style.display = 'block';
         }
 
+        function countAliveTowers(playerIndex) {
+            const towers = gameData.players[playerIndex].towers;
+            let count = 0;
+            
+            if (towers.king.health > 0) count++;
+            if (towers.left.health > 0) count++;
+            if (towers.right.health > 0) count++;
+            
+            return count;
+        }
+
+        function calculateTotalTowerHealth(playerIndex) {
+            const towers = gameData.players[playerIndex].towers;
+            return towers.king.health + towers.left.health + towers.right.health;
+        }
+
         function resetGame() {
-            // Ripristina lo stato del gioco
-            gameData.players[0].towerHealth = 100;
-            gameData.players[1].towerHealth = 100;
-            gameData.units = [];
-            
-            // Rimuovi tutte le unità dal campo di battaglia
-            const units = document.querySelectorAll('.unit');
-            units.forEach(unit => unit.remove());
-            
             // Torna alla schermata iniziale
             endScreen.style.display = 'none';
             startScreen.style.display = 'block';
             
-            // Deseleziona i personaggi
-            characterCards.forEach(card => card.classList.remove('selected'));
-            selectedCharacters = [null, null];
+            // Pulisci il campo di battaglia
+            const units = document.querySelectorAll('.unit');
+            units.forEach(unit => unit.remove());
         }
     </script>
 </body>
