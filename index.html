@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login con Background</title>
+    <title>Clash Royale Style Game</title>
     <style>
         * {
             margin: 0;
@@ -13,90 +13,802 @@
         }
 
         body {
-            background-image: url('https://images.unsplash.com/photo-1506744038136-46273834b3fb');
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-            height: 100vh;
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+            min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            position: relative;
+            color: white;
         }
 
-        body::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
+        .screen {
             width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            z-index: 1;
+            max-width: 800px;
+            background: rgba(0, 0, 0, 0.7);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            text-align: center;
+            display: none;
         }
 
-        .login-container {
-            background-color: rgba(255, 255, 255, 0.9);
-            border-radius: 10px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-            width: 90%;
-            max-width: 400px;
-            padding: 30px;
-            z-index: 2;
-            position: relative;
+        #start-screen {
+            display: block;
         }
 
         h1 {
-            text-align: center;
-            margin-bottom: 25px;
-            color: #333;
-        }
-
-        .input-group {
+            color: #ffcc00;
             margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
         }
 
-        label {
-            display: block;
-            margin-bottom: 8px;
-            color: #555;
+        .player-input {
+            margin: 20px 0;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
         }
 
-        input[type="text"],
-        input[type="password"] {
-            width: 100%;
-            padding: 12px 15px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            font-size: 16px;
-        }
-
-        .login-button {
-            width: 100%;
-            padding: 12px;
-            background-color: #4a90e2;
-            color: white;
+        input, select {
+            width: 80%;
+            padding: 10px;
+            margin: 10px 0;
             border: none;
             border-radius: 5px;
-            font-size: 16px;
+            background: rgba(255, 255, 255, 0.9);
+        }
+
+        button {
+            background: #ffcc00;
+            color: #1a2a6c;
+            border: none;
+            padding: 12px 25px;
+            margin: 15px 5px;
+            border-radius: 5px;
+            font-weight: bold;
             cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        button:hover {
+            background: #ffdd44;
+            transform: scale(1.05);
+        }
+
+        .character-selection {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .character-card {
+            width: 120px;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .character-card:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-5px);
+        }
+
+        .character-card.selected {
+            background: rgba(255, 204, 0, 0.3);
+            border: 2px solid #ffcc00;
+        }
+
+        .character-image {
+            width: 80px;
+            height: 80px;
+            background: #555;
+            border-radius: 50%;
+            margin: 0 auto 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+        }
+
+        .game-area {
+            display: flex;
+            flex-direction: column;
+            height: 600px;
+        }
+
+        .player-info {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 10px;
+            margin-bottom: 10px;
+        }
+
+        .battlefield {
+            flex-grow: 1;
+            background: linear-gradient(to bottom, #2a553e, #4a755e);
+            border-radius: 10px;
+            position: relative;
+            overflow: hidden;
+            margin: 10px 0;
+        }
+
+        .river {
+            position: absolute;
+            top: 45%;
+            left: 0;
+            width: 100%;
+            height: 10%;
+            background: linear-gradient(to right, #1a5f7a, #2a8bb8, #1a5f7a);
+            z-index: 1;
+        }
+
+        .tower {
+            position: absolute;
+            width: 60px;
+            height: 100px;
+            background: #8B4513;
+            border-radius: 10px;
+            z-index: 2;
+        }
+
+        #player1-tower {
+            bottom: 10px;
+            left: 20%;
+        }
+
+        #player2-tower {
+            top: 10px;
+            right: 20%;
+        }
+
+        .tower-top {
+            position: absolute;
+            width: 80px;
+            height: 40px;
+            background: #A52A2A;
+            border-radius: 10px;
+            top: -20px;
+            left: -10px;
+        }
+
+        .elixir-bar {
+            height: 20px;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 10px;
+            margin: 10px 0;
+            overflow: hidden;
+        }
+
+        .elixir-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(to right, #8A2BE2, #4B0082);
+            border-radius: 10px;
+            transition: width 0.5s;
+        }
+
+        .cards-container {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .game-card {
+            width: 80px;
+            height: 100px;
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f);
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .game-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(255, 204, 0, 0.5);
+        }
+
+        .game-card:active {
+            transform: translateY(0);
+        }
+
+        .card-cost {
+            position: absolute;
+            top: 5px;
+            left: 5px;
+            background: #8A2BE2;
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .card-image {
+            width: 50px;
+            height: 50px;
+            background: #555;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            margin: 5px 0;
+        }
+
+        .unit {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            z-index: 3;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            transition: all 0.5s;
+        }
+
+        .player1-unit {
+            background: #3498db;
+            bottom: 10px;
+        }
+
+        .player2-unit {
+            background: #e74c3c;
+            top: 10px;
+        }
+
+        .health-bar {
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .health-fill {
+            height: 100%;
+            width: 100%;
+            background: #2ecc71;
+            transition: width 0.3s;
+        }
+
+        .message {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+            z-index: 10;
+            text-align: center;
+        }
+
+        .hidden {
+            display: none;
         }
     </style>
 </head>
 <body>
-    <div class="login-container">
-        <h1>Login</h1>
-        <form>
-            <div class="input-group">
-                <label for="username">Username</label>
-                <input type="text" id="username">
+    <!-- Schermata iniziale -->
+    <div id="start-screen" class="screen">
+        <h1>Clash Royale Style Game</h1>
+        
+        <div class="player-input">
+            <h2>Giocatore 1</h2>
+            <input type="text" id="player1-name" placeholder="Nome Giocatore 1">
+            
+            <h3>Seleziona Personaggio</h3>
+            <div class="character-selection">
+                <div class="character-card" data-character="archer">
+                    <div class="character-image">🏹</div>
+                    <p>Arciere</p>
+                </div>
+                <div class="character-card" data-character="knight">
+                    <div class="character-image">⚔️</div>
+                    <p>Cavaliere</p>
+                </div>
+                <div class="character-card" data-character="wizard">
+                    <div class="character-image">🔮</div>
+                    <p>Mago</p>
+                </div>
+                <div class="character-card" data-character="giant">
+                    <div class="character-image">🛡️</div>
+                    <p>Gigante</p>
+                </div>
             </div>
-            <div class="input-group">
-                <label for="password">Password</label>
-                <input type="password" id="password">
+        </div>
+        
+        <div class="player-input">
+            <h2>Giocatore 2</h2>
+            <input type="text" id="player2-name" placeholder="Nome Giocatore 2">
+            
+            <h3>Seleziona Personaggio</h3>
+            <div class="character-selection">
+                <div class="character-card" data-character="archer">
+                    <div class="character-image">🏹</div>
+                    <p>Arciere</p>
+                </div>
+                <div class="character-card" data-character="knight">
+                    <div class="character-image">⚔️</div>
+                    <p>Cavaliere</p>
+                </div>
+                <div class="character-card" data-character="wizard">
+                    <div class="character-image">🔮</div>
+                    <p>Mago</p>
+                </div>
+                <div class="character-card" data-character="giant">
+                    <div class="character-image">🛡️</div>
+                    <p>Gigante</p>
+                </div>
             </div>
-            <button type="submit" class="login-button">Login</button>
-        </form>
+        </div>
+        
+        <button id="start-button">Inizia Partita</button>
     </div>
+    
+    <!-- Schermata di gioco -->
+    <div id="game-screen" class="screen">
+        <div class="game-area">
+            <div class="player-info">
+                <div id="player1-info">
+                    <h2 id="player1-display-name">Giocatore 1</h2>
+                    <div class="elixir-bar">
+                        <div id="player1-elixir" class="elixir-fill"></div>
+                    </div>
+                </div>
+                <div id="timer">90</div>
+                <div id="player2-info">
+                    <h2 id="player2-display-name">Giocatore 2</h2>
+                    <div class="elixir-bar">
+                        <div id="player2-elixir" class="elixir-fill"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="battlefield">
+                <div class="river"></div>
+                
+                <div id="player1-tower" class="tower">
+                    <div class="tower-top"></div>
+                    <div class="health-bar">
+                        <div id="player1-tower-health" class="health-fill"></div>
+                    </div>
+                </div>
+                
+                <div id="player2-tower" class="tower">
+                    <div class="tower-top"></div>
+                    <div class="health-bar">
+                        <div id="player2-tower-health" class="health-fill"></div>
+                    </div>
+                </div>
+                
+                <!-- Le unità verranno aggiunte qui dinamicamente -->
+            </div>
+            
+            <div class="cards-container" id="player1-cards">
+                <!-- Le carte verranno aggiunte qui dinamicamente -->
+            </div>
+            
+            <div class="cards-container" id="player2-cards">
+                <!-- Le carte verranno aggiunte qui dinamicamente -->
+            </div>
+        </div>
+    </div>
+    
+    <!-- Schermata finale -->
+    <div id="end-screen" class="screen">
+        <h1>Partita Terminata</h1>
+        <div id="winner-message"></div>
+        <button id="play-again-button">Rigioca</button>
+    </div>
+
+    <script>
+        // Dati del gioco
+        const gameData = {
+            players: [
+                { name: "", character: "", elixir: 0, towerHealth: 100 },
+                { name: "", character: "", elixir: 0, towerHealth: 100 }
+            ],
+            characters: {
+                archer: { name: "Arciere", cost: 3, damage: 15, health: 50, speed: 2, emoji: "🏹" },
+                knight: { name: "Cavaliere", cost: 4, damage: 25, health: 100, speed: 1, emoji: "⚔️" },
+                wizard: { name: "Mago", cost: 5, damage: 35, health: 60, speed: 1, emoji: "🔮" },
+                giant: { name: "Gigante", cost: 6, damage: 20, health: 200, speed: 0.5, emoji: "🛡️" }
+            },
+            gameState: "start", // start, playing, ended
+            timer: 90,
+            units: [],
+            currentPlayer: 0,
+            elixirGenerationRate: 0.2, // elisir per secondo
+            lastElixirUpdate: Date.now()
+        };
+
+        // Elementi DOM
+        const startScreen = document.getElementById('start-screen');
+        const gameScreen = document.getElementById('game-screen');
+        const endScreen = document.getElementById('end-screen');
+        const startButton = document.getElementById('start-button');
+        const playAgainButton = document.getElementById('play-again-button');
+        const player1NameInput = document.getElementById('player1-name');
+        const player2NameInput = document.getElementById('player2-name');
+        const characterCards = document.querySelectorAll('.character-card');
+        const player1DisplayName = document.getElementById('player1-display-name');
+        const player2DisplayName = document.getElementById('player2-display-name');
+        const player1Elixir = document.getElementById('player1-elixir');
+        const player2Elixir = document.getElementById('player2-elixir');
+        const player1TowerHealth = document.getElementById('player1-tower-health');
+        const player2TowerHealth = document.getElementById('player2-tower-health');
+        const timerElement = document.getElementById('timer');
+        const winnerMessage = document.getElementById('winner-message');
+        const battlefield = document.querySelector('.battlefield');
+        const player1CardsContainer = document.getElementById('player1-cards');
+        const player2CardsContainer = document.getElementById('player2-cards');
+
+        // Variabili di gioco
+        let gameInterval;
+        let selectedCharacters = [null, null];
+
+        // Inizializzazione
+        document.addEventListener('DOMContentLoaded', init);
+
+        function init() {
+            // Aggiungi event listeners
+            startButton.addEventListener('click', startGame);
+            playAgainButton.addEventListener('click', resetGame);
+            
+            // Aggiungi event listeners per selezione personaggi
+            characterCards.forEach(card => {
+                card.addEventListener('click', function() {
+                    const character = this.getAttribute('data-character');
+                    const playerIndex = this.closest('.player-input') ? 
+                        (this.closest('.player-input').querySelector('h2').textContent === 'Giocatore 1' ? 0 : 1) : 0;
+                    
+                    // Deseleziona altre carte dello stesso giocatore
+                    const playerCards = this.closest('.player-input').querySelectorAll('.character-card');
+                    playerCards.forEach(c => c.classList.remove('selected'));
+                    
+                    // Seleziona questa carta
+                    this.classList.add('selected');
+                    selectedCharacters[playerIndex] = character;
+                });
+            });
+        }
+
+        function startGame() {
+            // Verifica che i nomi e i personaggi siano stati selezionati
+            if (!player1NameInput.value || !player2NameInput.value) {
+                alert("Inserisci i nomi di entrambi i giocatori!");
+                return;
+            }
+            
+            if (!selectedCharacters[0] || !selectedCharacters[1]) {
+                alert("Seleziona un personaggio per entrambi i giocatori!");
+                return;
+            }
+            
+            // Imposta i dati dei giocatori
+            gameData.players[0].name = player1NameInput.value;
+            gameData.players[0].character = selectedCharacters[0];
+            gameData.players[0].elixir = 5;
+            gameData.players[0].towerHealth = 100;
+            
+            gameData.players[1].name = player2NameInput.value;
+            gameData.players[1].character = selectedCharacters[1];
+            gameData.players[1].elixir = 5;
+            gameData.players[1].towerHealth = 100;
+            
+            // Aggiorna la UI
+            player1DisplayName.textContent = gameData.players[0].name;
+            player2DisplayName.textContent = gameData.players[1].name;
+            updateElixirBars();
+            updateTowerHealth();
+            
+            // Crea le carte per i giocatori
+            createPlayerCards();
+            
+            // Cambia schermata
+            startScreen.style.display = 'none';
+            gameScreen.style.display = 'block';
+            
+            // Avvia il gioco
+            gameData.gameState = "playing";
+            gameData.timer = 90;
+            gameData.units = [];
+            gameData.currentPlayer = 0;
+            gameData.lastElixirUpdate = Date.now();
+            
+            // Avvia il loop di gioco
+            gameInterval = setInterval(gameLoop, 100);
+        }
+
+        function gameLoop() {
+            // Aggiorna l'elisir
+            updateElixir();
+            
+            // Aggiorna le unità
+            updateUnits();
+            
+            // Aggiorna il timer
+            updateTimer();
+            
+            // Controlla condizioni di vittoria
+            checkWinConditions();
+        }
+
+        function updateElixir() {
+            const now = Date.now();
+            const elapsed = (now - gameData.lastElixirUpdate) / 1000; // secondi
+            
+            if (elapsed >= 1) {
+                gameData.players[0].elixir = Math.min(gameData.players[0].elixir + gameData.elixirGenerationRate, 10);
+                gameData.players[1].elixir = Math.min(gameData.players[1].elixir + gameData.elixirGenerationRate, 10);
+                gameData.lastElixirUpdate = now;
+                updateElixirBars();
+            }
+        }
+
+        function updateElixirBars() {
+            player1Elixir.style.width = (gameData.players[0].elixir * 10) + '%';
+            player2Elixir.style.width = (gameData.players[1].elixir * 10) + '%';
+        }
+
+        function updateTowerHealth() {
+            player1TowerHealth.style.width = gameData.players[0].towerHealth + '%';
+            player2TowerHealth.style.width = gameData.players[1].towerHealth + '%';
+        }
+
+        function updateTimer() {
+            gameData.timer -= 0.1;
+            timerElement.textContent = Math.max(0, Math.ceil(gameData.timer));
+            
+            if (gameData.timer <= 0) {
+                endGame("time");
+            }
+        }
+
+        function createPlayerCards() {
+            // Pulisci i contenitori delle carte
+            player1CardsContainer.innerHTML = '';
+            player2CardsContainer.innerHTML = '';
+            
+            // Crea 4 carte per ogni giocatore
+            for (let i = 0; i < 4; i++) {
+                const characterKeys = Object.keys(gameData.characters);
+                const randomCharacterKey = characterKeys[Math.floor(Math.random() * characterKeys.length)];
+                const character = gameData.characters[randomCharacterKey];
+                
+                // Crea carta per giocatore 1
+                const card1 = createCardElement(character, randomCharacterKey, 0);
+                player1CardsContainer.appendChild(card1);
+                
+                // Crea carta per giocatore 2
+                const card2 = createCardElement(character, randomCharacterKey, 1);
+                player2CardsContainer.appendChild(card2);
+            }
+        }
+
+        function createCardElement(character, characterKey, playerIndex) {
+            const card = document.createElement('div');
+            card.className = 'game-card';
+            card.setAttribute('data-character', characterKey);
+            card.setAttribute('data-player', playerIndex);
+            
+            const cost = document.createElement('div');
+            cost.className = 'card-cost';
+            cost.textContent = character.cost;
+            
+            const image = document.createElement('div');
+            image.className = 'card-image';
+            image.textContent = character.emoji;
+            
+            const name = document.createElement('div');
+            name.textContent = character.name;
+            name.style.fontSize = '12px';
+            name.style.marginTop = '5px';
+            
+            card.appendChild(cost);
+            card.appendChild(image);
+            card.appendChild(name);
+            
+            // Aggiungi event listener per il click sulla carta
+            card.addEventListener('click', function() {
+                playCard(this, playerIndex);
+            });
+            
+            return card;
+        }
+
+        function playCard(cardElement, playerIndex) {
+            const characterKey = cardElement.getAttribute('data-character');
+            const character = gameData.characters[characterKey];
+            
+            // Verifica se il giocatore ha abbastanza elisir
+            if (gameData.players[playerIndex].elixir < character.cost) {
+                alert("Elisir insufficiente!");
+                return;
+            }
+            
+            // Sottrai l'elisir
+            gameData.players[playerIndex].elixir -= character.cost;
+            updateElixirBars();
+            
+            // Crea l'unità
+            const unit = {
+                player: playerIndex,
+                type: characterKey,
+                health: character.health,
+                maxHealth: character.health,
+                damage: character.damage,
+                speed: character.speed,
+                x: playerIndex === 0 ? 50 : 750, // Posizione iniziale
+                y: 100 + Math.random() * 200, // Posizione Y casuale
+                element: null
+            };
+            
+            gameData.units.push(unit);
+            
+            // Aggiungi l'unità al campo di battaglia
+            addUnitToBattlefield(unit);
+            
+            // Rimuovi la carta e sostituiscila con una nuova
+            const newCharacterKeys = Object.keys(gameData.characters);
+            const newRandomCharacterKey = newCharacterKeys[Math.floor(Math.random() * newCharacterKeys.length)];
+            const newCharacter = gameData.characters[newRandomCharacterKey];
+            
+            const newCard = createCardElement(newCharacter, newRandomCharacterKey, playerIndex);
+            cardElement.parentNode.replaceChild(newCard, cardElement);
+        }
+
+        function addUnitToBattlefield(unit) {
+            const unitElement = document.createElement('div');
+            unitElement.className = `unit player${unit.player+1}-unit`;
+            unitElement.style.left = unit.x + 'px';
+            unitElement.style.top = unit.y + 'px';
+            unitElement.innerHTML = `
+                ${gameData.characters[unit.type].emoji}
+                <div class="health-bar">
+                    <div class="health-fill" style="width: 100%"></div>
+                </div>
+            `;
+            
+            battlefield.appendChild(unitElement);
+            unit.element = unitElement;
+        }
+
+        function updateUnits() {
+            gameData.units.forEach(unit => {
+                // Muovi l'unità
+                if (unit.player === 0) {
+                    unit.x += unit.speed; // Si muove verso destra
+                } else {
+                    unit.x -= unit.speed; // Si muove verso sinistra
+                }
+                
+                // Aggiorna la posizione
+                unit.element.style.left = unit.x + 'px';
+                
+                // Controlla collisioni con le torri
+                checkTowerCollision(unit);
+                
+                // Controlla collisioni con altre unità
+                checkUnitCollisions(unit);
+                
+                // Aggiorna la barra della salute
+                const healthFill = unit.element.querySelector('.health-fill');
+                healthFill.style.width = (unit.health / unit.maxHealth) * 100 + '%';
+                
+                // Rimuovi le unità morte
+                if (unit.health <= 0) {
+                    unit.element.remove();
+                    gameData.units = gameData.units.filter(u => u !== unit);
+                }
+            });
+        }
+
+        function checkTowerCollision(unit) {
+            const tower = unit.player === 0 ? gameData.players[1] : gameData.players[0];
+            const towerX = unit.player === 0 ? 750 : 50;
+            
+            // Se l'unità è vicina alla torre avversaria
+            if (Math.abs(unit.x - towerX) < 50) {
+                // Infliggi danni alla torre
+                tower.towerHealth -= unit.damage / 10;
+                updateTowerHealth();
+                
+                // L'unità muore dopo l'attacco (per semplicità)
+                unit.health = 0;
+            }
+        }
+
+        function checkUnitCollisions(unit) {
+            gameData.units.forEach(otherUnit => {
+                // Se l'unità è avversaria e vicina
+                if (otherUnit.player !== unit.player && 
+                    Math.abs(unit.x - otherUnit.x) < 50 && 
+                    Math.abs(unit.y - otherUnit.y) < 50) {
+                    
+                    // Le unità si attaccano a vicenda
+                    unit.health -= otherUnit.damage;
+                    otherUnit.health -= unit.damage;
+                }
+            });
+        }
+
+        function checkWinConditions() {
+            // Controlla se una torre è stata distrutta
+            if (gameData.players[0].towerHealth <= 0) {
+                endGame("player2");
+                return;
+            }
+            
+            if (gameData.players[1].towerHealth <= 0) {
+                endGame("player1");
+                return;
+            }
+        }
+
+        function endGame(reason) {
+            clearInterval(gameInterval);
+            gameData.gameState = "ended";
+            
+            // Determina il vincitore
+            let winner;
+            if (reason === "player1") {
+                winner = gameData.players[0].name;
+            } else if (reason === "player2") {
+                winner = gameData.players[1].name;
+            } else {
+                // In caso di timeout, vince chi ha più salute della torre
+                winner = gameData.players[0].towerHealth > gameData.players[1].towerHealth ? 
+                    gameData.players[0].name : gameData.players[1].name;
+            }
+            
+            // Mostra il messaggio del vincitore
+            winnerMessage.textContent = `${winner} ha vinto la partita!`;
+            
+            // Cambia schermata
+            gameScreen.style.display = 'none';
+            endScreen.style.display = 'block';
+        }
+
+        function resetGame() {
+            // Ripristina lo stato del gioco
+            gameData.players[0].towerHealth = 100;
+            gameData.players[1].towerHealth = 100;
+            gameData.units = [];
+            
+            // Rimuovi tutte le unità dal campo di battaglia
+            const units = document.querySelectorAll('.unit');
+            units.forEach(unit => unit.remove());
+            
+            // Torna alla schermata iniziale
+            endScreen.style.display = 'none';
+            startScreen.style.display = 'block';
+            
+            // Deseleziona i personaggi
+            characterCards.forEach(card => card.classList.remove('selected'));
+            selectedCharacters = [null, null];
+        }
+    </script>
 </body>
 </html>
